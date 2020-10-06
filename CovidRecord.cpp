@@ -1,4 +1,3 @@
-//#define _GLIBCXX_USE_CXX11_ABI 0
 #include "CovidRecord.h"
 //using namespace std;
 
@@ -20,6 +19,10 @@ CovidRecord::CovidRecord(string temp_country, string temp_countryCode, string te
     : country(temp_country), countryCode(temp_countryCode), date(temp_date), newConfirmed(temp_newConfirmed), newDeath(temp_newDeath), newRecovered(temp_newRecovered), premium(temp_premium), slug(temp_slug), totalConfirmed(temp_totalConfirmed), totalDeaths(temp_totalDeaths), totalRecovered(temp_totalRecovered)
 {}
 
+//getter method for country
+string CovidRecord::getCountry(){
+    return this->country;
+}
 
 //getter method for countryCode
 string CovidRecord::getCountryCode(){
