@@ -1,3 +1,7 @@
+// Author: Xiaoxuan Yang
+// Description: This file contains the main function and some helper fucntions for showing COVID stats.
+// Date: Octber 5, 2020
+
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -30,7 +34,7 @@ int main(){
     file.open(fileName, ifstream::in);
     if (!file.good())
     {
-        cerr << "Error: cannot open the file \""  << fileName <<  "\".";
+        cerr << "Error: cannot open the file \""  << fileName <<  "\"." << endl;
         exit(EXIT_FAILURE);
     }
 
@@ -39,6 +43,7 @@ int main(){
     getline(file,line);  //read the first line (i.e. headers) in the file 
     if (line.find("\"NewConfirmed\",\"NewDeaths\",") == std::string::npos){
         cerr << "Error: wrong file!" << endl;
+        file.close();
         exit(EXIT_FAILURE); 
     }
 
@@ -57,7 +62,8 @@ int main(){
     
     //check whether the user entered a valid option
     if (option.empty() || !isdigit(option[0]) || option.length() > 2){ 
-        cerr << "Error: The option entered is not a valid option." << endl;
+        cerr << "Error: the option you entered is not valid." << endl;
+        file.close();
         exit(EXIT_FAILURE); 
     }
 
@@ -73,20 +79,21 @@ int main(){
 
     //check whether the user entered a valid order
     if (order.empty() || !isdigit(order[0]) || order.length() > 2){ 
-        cerr << "Error: The choice entered is not valid." << endl;
+        cerr << "Error: The choice you entered is not valid." << endl;
+        file.close();
         exit(EXIT_FAILURE); 
     }
 
     //convert string "order" to an integer
     int orderNumber = parseStringToInt(order);
     if (orderNumber> 2 || orderNumber < 1){
-        cerr << "Error: The choice entered is not valid." << endl;
+        cerr << "Error: The choice you entered is not valid." << endl;
+        file.close();
         exit(EXIT_FAILURE); 
     }
     
     //read data from the file & create vector 
     vector<CovidRecord> dataset;
-    
     while(!file.eof()) {
         getline (file,line);
         
@@ -113,7 +120,7 @@ int main(){
             }
             string token = line.substr(0, line.find(delimiter));
             data[i-1] = token;
-            line.erase(0,line.find(delimiter) + delimiter.length());    //remove substring that is already tokenized from original string
+            line.erase(0,line.find(delimiter) + delimiter.length());    //remove substring that is tokenized
         }
         data[10] = line;
 
@@ -145,9 +152,6 @@ int main(){
         else {   //ascending order
             sort(dataset.rbegin(),dataset.rend(),compareByNewConfirmed);
         }
-        for (int i=0; i<10;i++){
-            cerr << dataset[i].getNewConfirmed() << ": " <<dataset[i].getCountry() << endl;
-        }
         break;
     case 2:     //sort data by newDeaths
         if (orderNumber == 2){   //descending order
@@ -155,9 +159,6 @@ int main(){
         }
         else {   //ascending order
             sort(dataset.rbegin(),dataset.rend(),compareByNewDeaths);
-        }
-        for (int i=0;i<10;i++){
-            cerr << dataset[i].getNewDeath() << ": " <<dataset[i].getCountry() << endl;
         }
         break;
     case 3:     //sort data by newRecovered
@@ -167,9 +168,6 @@ int main(){
         else {   //ascending order
             sort(dataset.rbegin(),dataset.rend(),compareByNewRecovered);
         }
-        for (int i=0;i<10;i++){
-            cerr << dataset[i].getNewRecovered() << ": " <<dataset[i].getCountry() << endl;
-        }
         break;
     case 4:     //sort data by totalConfirmed
         if (orderNumber == 2){   //descending order
@@ -177,9 +175,6 @@ int main(){
         }
         else {   //ascending order
             sort(dataset.rbegin(),dataset.rend(),compareByTotalConfirmed);
-        }
-        for (int i=0;i<10;i++){
-            cerr << dataset[i].getTotalConfirmed() << ": " <<dataset[i].getCountry() << endl;
         }
         break;
     case 5:     //sort data by totalDeaths
@@ -189,9 +184,6 @@ int main(){
         else {   //ascending order
             sort(dataset.rbegin(),dataset.rend(),compareByTotalDeaths);
         }
-        for (int i=0;i<10;i++){
-            cerr << dataset[i].getTotalDeaths() << ": " <<dataset[i].getCountry() << endl;
-        }
         break;
     case 6:     //sort data by totalRecovered
         if (orderNumber == 2){   //descending order
@@ -200,16 +192,11 @@ int main(){
         else {   //ascending order
             sort(dataset.rbegin(),dataset.rend(),compareByTotalRecovered);
         }
-        for (int i=0;i<10;i++){
-            cerr << dataset[i].getTotalRecovered() << ": " <<dataset[i].getCountry() << endl;
-        }
         break;
     default:
-        cerr << "Error: The option entered is out of bound.";
+        cerr << "Error: The option entered is out of bound." << endl;
         exit(EXIT_FAILURE);
     }  
-
-    cout << endl;
 
     //print graph
     generateGraph (dataset, optionNumber, orderNumber);
@@ -217,6 +204,7 @@ int main(){
 
 //helper function definitions
 //parseStringToInt() parses a string representation of a number to int 
+//return the integer representation of the string passed in
 int parseStringToInt(string s){
     stringstream stringStream(s);
     int num;
@@ -225,38 +213,45 @@ int parseStringToInt(string s){
 }
 
 //compare newConfirmed for the sort() funtion
+//return a boolean value 
 bool compareByNewConfirmed (CovidRecord r1, CovidRecord r2){ 
     return r1.getNewConfirmed() > r2.getNewConfirmed();
 }
 
 //compare newDeaths for the sort() funtion
+//return a boolean value
 bool compareByNewDeaths (CovidRecord r1, CovidRecord r2){
     return r1.getNewDeath() > r2.getNewDeath();
 }
 
 //compare newRecovered for the sort() funtion
+//return a boolean value
 bool compareByNewRecovered (CovidRecord r1, CovidRecord r2){
     return r1.getNewRecovered() > r2.getNewRecovered();
 }
 
 //compare totalConfirmed for the sort() funtion
+//return a boolean value
 bool compareByTotalConfirmed (CovidRecord r1, CovidRecord r2){
     return r1.getTotalConfirmed() > r2.getTotalConfirmed();
 }
 
 //compare totalDeaths for the sort() funtion
+//return a boolean value
 bool compareByTotalDeaths (CovidRecord r1, CovidRecord r2){
     return r1.getTotalDeaths() > r2.getTotalDeaths();
 }
 
 //compare totalRecovered for the sort() funtion
+//return a boolean value, return true if totalRecovered value of r1 > totalRecovered value of r2
 bool compareByTotalRecovered (CovidRecord r1, CovidRecord r2){
     return r1.getTotalRecovered() > r2.getTotalRecovered();
 }
 
-//print data after sorting 
+//This function prints data after sorting 
 //parameter option is the attribute the user want to see:1 represents newConfirmed, 2 represents newDeaths, 3 represents newRecovered, 
     //4 represents totalConfirmed, 5 represents totalDeaths, 6 represents totalRecovered 
+//This function returns nothing, but print the graph
 void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
     int base;
     switch (optionNumber)
@@ -266,96 +261,84 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
         for (int i =0;i<10;i++){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getNewConfirmed() != 0){
-                int j;
-                for (j = 1; j<=vec[i].getNewConfirmed()/base;j++){      //print #
+                for (int j = 1; j<=vec[i].getNewConfirmed()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
         cout << "--------------------------------------------------------------------" << endl;
-        cout << "New Confirmed Cases; each # is approx. " << base << " cases";
+        cout << "New Confirmed Cases; each # is approx. " << base << " cases" << endl;
         break;
     case 2:     //show data by newDeaths
         base = getBaseNumberForGraph(vec[0].getNewDeath(),vec[9].getNewDeath(),orderNumber);
         for (int i =0;i<10;i++){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getNewDeath() != 0){
-                int j;
-                for (j = 1; j<=vec[i].getNewDeath()/base;j++){      //print #
+                for (int j = 1; j<=vec[i].getNewDeath()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
         cout << "--------------------------------------------------------------------" << endl;
-        cout << "New Death Cases; each # is approx. " << base << " cases";
+        cout << "New Death Cases; each # is approx. " << base << " cases" << endl;
         break;
     case 3:     //show data by newRecovered
         base = getBaseNumberForGraph(vec[0].getNewRecovered(),vec[9].getNewRecovered(),orderNumber);
         for (int i =0;i<10;i++){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getNewRecovered() != 0){
-                int j;
-                for (j = 1; j<=vec[i].getNewRecovered()/base;j++){      //print #
+                for (int j = 1; j<=vec[i].getNewRecovered()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
         cout << "--------------------------------------------------------------------" << endl;
-        cout << "New Recovered Cases; each # is approx. " << base << " cases";
+        cout << "New Recovered Cases; each # is approx. " << base << " cases" << endl;
         break;
     case 4:     //show data by totalConfirmed
         base = getBaseNumberForGraph(vec[0].getTotalConfirmed(),vec[9].getTotalConfirmed(),orderNumber);
         for (int i =0;i<10;i++){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getTotalConfirmed() != 0){
-                int j;
-                for (j = 1; j<=vec[i].getTotalConfirmed()/base;j++){      //print #
+                for (int j = 1; j<=vec[i].getTotalConfirmed()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
         cout << "--------------------------------------------------------------------" << endl;
-        cout << "Totoal Confirmed Cases; each # is approx. " << base << " cases";
+        cout << "Totoal Confirmed Cases; each # is approx. " << base << " cases" << endl;
         break;
     case 5:     //show data by totalDeaths
         base = getBaseNumberForGraph(vec[0].getTotalDeaths(),vec[9].getTotalDeaths(),orderNumber);
         for (int i =0;i<10;i++){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getTotalDeaths() != 0){
-                int j;
-                for (j = 1; j<=vec[i].getTotalDeaths()/base;j++){      //print #
+                for (int j = 1; j<=vec[i].getTotalDeaths()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
         cout << "--------------------------------------------------------------------" << endl;
-        cout << "Total Death Cases; each # is approx. " << base << " cases";
+        cout << "Total Death Cases; each # is approx. " << base << " cases" << endl;
         break;
     case 6:     //show data by totalRecovered
         base = getBaseNumberForGraph(vec[0].getTotalRecovered(),vec[9].getTotalRecovered(),orderNumber);
         for (int i =0;i<10;i++){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0 && vec[i].getTotalRecovered() != 0){
-                int j;
-                for (j = 1; j<=vec[i].getTotalRecovered()/base;j++){      //print #
+                for (int j = 1; j<=vec[i].getTotalRecovered()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
         cout << "--------------------------------------------------------------------" << endl;
-        cout << "Total Recovered Cases; each # is approx. " << base << " cases";
+        cout << "Total Recovered Cases; each # is approx. " << base << " cases" << endl;
         break;
     default:
         cerr << "Unexpected Error occured when generating the graph.";
@@ -364,7 +347,8 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
 }
 
 //calculate how many cases a # represents based on the order of the data
-//parameter: first represent the first memebr of the vector; last represents the 9th member of the vector
+//parameter: first represent the first memebr of the vector; last represents the 9th member of the vector, orderNumber represents ascending order or descending order
+//this function returns an int as the base value for each #
 int getBaseNumberForGraph (int first, int last, int orderNumber){
     if (orderNumber == 1){      //ascending order
         if (last == 0){
