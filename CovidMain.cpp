@@ -267,10 +267,10 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getNewConfirmed() != 0){
                 int j;
-                for (j = 0; j<=vec[i].getNewConfirmed()/base;j++){      //print #
+                for (j = 1; j<=vec[i].getNewConfirmed()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j;
+                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
@@ -283,10 +283,10 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getNewDeath() != 0){
                 int j;
-                for (j = 0; j<=vec[i].getNewDeath()/base;j++){      //print #
+                for (j = 1; j<=vec[i].getNewDeath()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j;
+                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
@@ -299,10 +299,10 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getNewRecovered() != 0){
                 int j;
-                for (j = 0; j<=vec[i].getNewRecovered()/base;j++){      //print #
+                for (j = 1; j<=vec[i].getNewRecovered()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j;
+                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
@@ -315,10 +315,10 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getTotalConfirmed() != 0){
                 int j;
-                for (j = 0; j<=vec[i].getTotalConfirmed()/base;j++){      //print #
+                for (j = 1; j<=vec[i].getTotalConfirmed()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j;
+                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
@@ -331,10 +331,10 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0  && vec[i].getTotalDeaths() != 0){
                 int j;
-                for (j = 0; j<=vec[i].getTotalDeaths()/base;j++){      //print #
+                for (j = 1; j<=vec[i].getTotalDeaths()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j;
+                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
@@ -347,10 +347,10 @@ void generateGraph (vector<CovidRecord> vec, int optionNumber, int orderNumber){
             cout << vec[i].getCountryCode() << " | ";
             if (base != 0 && vec[i].getTotalRecovered() != 0){
                 int j;
-                for (j = 0; j<=vec[i].getTotalRecovered()/base;j++){      //print #
+                for (j = 1; j<=vec[i].getTotalRecovered()/base;j++){      //print #
                     cout << "#";
                 }
-                cerr <<"  "<< j;
+                cerr <<"  "<< j-1;
             }
             cout << endl;
         }
