@@ -5,21 +5,20 @@
 #ifndef COVID_RECORD_H
 #define COVID_RECORD_H
 #include <string>
-using namespace std;
 
 class CovidRecord{
     private:
-        string country, countryCode, date;
+        std::string country, countryCode, date;
         int newConfirmed, newDeath, newRecovered;
-        string premium, slug;
+        std::string premium, slug;
         int totalConfirmed, totalDeaths, totalRecovered;
     public:
         //contructor
-        CovidRecord(string temp_country, string temp_countryCode, string temp_date, int temp_newConfirmed, int temp_newDeath, int temp_newRecovered, string temp_premium, string temp_slug, int temp_totalConfirmed, int temp_totalDeaths, int temp_totalRecovered); 
+        CovidRecord(std::string temp_country, std::string temp_countryCode, std::string temp_date, int temp_newConfirmed, int temp_newDeath, int temp_newRecovered, std::string temp_premium, std::string temp_slug, int temp_totalConfirmed, int temp_totalDeaths, int temp_totalRecovered); 
         
         //getter methods
-        string getCountry();
-        string getCountryCode();
+        std::string getCountry();
+        std::string getCountryCode();
         int getNewConfirmed();
         int getNewDeath();
         int getNewRecovered();
